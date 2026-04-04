@@ -1,0 +1,11 @@
+streamlit>=1.37.0
+pandas
+numpy
+scipy
+matplotlib
+cartopy
+requests
+openpyxl
+ephem
+markdown
+xhtml2pdf

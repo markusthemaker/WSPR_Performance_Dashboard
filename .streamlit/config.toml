@@ -1,0 +1,18 @@
+[theme]
+# Kills the default Streamlit red/pink and uses Neon Green for sliders/checkboxes
+primaryColor = "#39ff14"
+
+# Sets the base theme to dark mode so widgets blend perfectly
+base = "dark"
+
+# Deep background for the main app area
+backgroundColor = "#050a15"
+
+# Slightly lighter background for expanders and input boxes
+secondaryBackgroundColor = "#1A2642"
+
+# Crisp white/grey text for inputs
+textColor = "#e0e0e0"
+
+# Sets the core Streamlit widgets to monospace
+font = "monospace"
