@@ -275,7 +275,7 @@ def render_segment_inspector(analysis_id, title, is_compare, is_sequential, enri
         
         sorted_disp_df = disp_df.sort_values(by=disp_df.columns[-1], ascending=False, na_position='last').reset_index(drop=True)
         
-        tbl_event = st.dataframe(sorted_disp_df, use_container_width=True, hide_index=True, selection_mode="multi-row", on_select="rerun", key=f"tbl_{analysis_id}_{run_id}_{selected_seg}")
+        tbl_event = st.dataframe(sorted_disp_df, width='stretch', hide_index=True, selection_mode="multi-row", on_select="rerun", key=f"tbl_{analysis_id}_{run_id}_{selected_seg}")
         
         # Render Raw Drill-Down Data (if user clicks a row)
         sel_rows = tbl_event.selection.rows
@@ -294,7 +294,7 @@ def render_segment_inspector(analysis_id, title, is_compare, is_sequential, enri
                     station_df['Date/Time (UTC)'] = pd.to_datetime(station_df['time']).dt.strftime('%Y-%m-%d %H:%M:%S')
                     drill_df = station_df[['Date/Time (UTC)', station_col, t['tbl_col_loc'], t['tbl_col_km'], t['tbl_col_az'], 'snr', 'power', 'stat_val', t['tbl_col_med_snr']]].copy()
                     drill_df.columns = ['Date/Time (UTC)', station_col, t['tbl_col_loc'], t['tbl_col_km'], t['tbl_col_az'], 'SNR (Raw)', 'TX Power (dBm)', 'Norm. SNR (dB)', t['tbl_col_med_snr']]
-                    st.dataframe(drill_df, use_container_width=True, hide_index=True)
+                    st.dataframe(drill_df, width='stretch', hide_index=True)
                     
                 else:
                     if is_sequential:
@@ -308,7 +308,7 @@ def render_segment_inspector(analysis_id, title, is_compare, is_sequential, enri
                             col_delta_lbl = t['tbl_col_med_delta'].replace("Median ", "")
                             joint_df[col_delta_lbl] = np.nan
                             drill_df = joint_df[['Date/Time (UTC)', station_col, t['tbl_col_loc'], t['tbl_col_km'], t['tbl_col_az'], col_u, col_r, col_delta_lbl, t['tbl_col_med_delta']]].copy()
-                            st.dataframe(drill_df, use_container_width=True, hide_index=True)
+                            st.dataframe(drill_df, width='stretch', hide_index=True)
                         else: st.info("No spots available for the selected station(s).", icon="ℹ️")
                     else:
                         joint_df = station_df[(station_df['has_u'] > 0) & (station_df['has_r'] > 0)].copy()
@@ -320,7 +320,7 @@ def render_segment_inspector(analysis_id, title, is_compare, is_sequential, enri
                             col_delta_lbl = t['tbl_col_med_delta'].replace("Median ", "")
                             drill_df = joint_df[['Date/Time (UTC)', station_col, t['tbl_col_loc'], t['tbl_col_km'], t['tbl_col_az'], 'snr_u_norm', 'snr_r_norm', 'Δ SNR (dB)', t['tbl_col_med_delta']]].copy()
                             drill_df.columns = ['Date/Time (UTC)', station_col, t['tbl_col_loc'], t['tbl_col_km'], t['tbl_col_az'], col_u, col_r, col_delta_lbl, t['tbl_col_med_delta']]
-                            st.dataframe(drill_df, use_container_width=True, hide_index=True)
+                            st.dataframe(drill_df, width='stretch', hide_index=True)
                         else: st.info("No joint spots available for the selected station(s).", icon="ℹ️")
             except FileNotFoundError: st.warning("Cache file expired. Please Run Analysis again.")
 
@@ -333,9 +333,9 @@ def render_lazy_download(analysis_id, fig, callsign, t):
     run_id = st.session_state.get("run_id", 0)
     buf_key = f"img_buf_{analysis_id}_{run_id}"
     if buf_key in st.session_state:
-        st.download_button("💾 Download", data=st.session_state[buf_key], file_name=f"WSPR_Map_{analysis_id}_{callsign}.png", mime="image/png", type="tertiary", use_container_width=True, key=f"dl_{analysis_id}_{run_id}")
+        st.download_button("💾 Download", data=st.session_state[buf_key], file_name=f"WSPR_Map_{analysis_id}_{callsign}.png", mime="image/png", type="tertiary", width='stretch', key=f"dl_{analysis_id}_{run_id}")
     else:
-        if st.button("Render High-Res Map ⚙️", key=f"prep_{analysis_id}_{run_id}", type="tertiary", use_container_width=True):
+        if st.button("Render High-Res Map ⚙️", key=f"prep_{analysis_id}_{run_id}", type="tertiary", width='stretch'):
             with st.spinner("⏳"):
                 if fig.axes:
                     ax = fig.axes[0]
@@ -516,10 +516,10 @@ with col_lang:
     st.selectbox("Lang", ["EN", "DE"], index=idx, key="lang_selector_ui", label_visibility="collapsed", on_change=update_lang, format_func=format_lang_ui)
 
 with col_b1: 
-    st.button(t["btn_reset"], on_click=set_reset_config, use_container_width=True)
+    st.button(t["btn_reset"], on_click=set_reset_config, width='stretch')
 
 with col_b2: 
-    st.button(t["btn_demo"], on_click=set_demo_config, use_container_width=True)
+    st.button(t["btn_demo"], on_click=set_demo_config, width='stretch')
 
 # ----------------------------------------
 # Expander 1: Core Parameters
@@ -626,11 +626,11 @@ run_tx_clicked = False
 run_rx_clicked = False
 
 with c_run1:
-    if st.button(t["btn_run_tx"], type="primary", use_container_width=True):
+    if st.button(t["btn_run_tx"], type="primary", width='stretch'):
         run_tx_clicked = True
 
 with c_run2:
-    if st.button(t["btn_run_rx"], type="primary", use_container_width=True):
+    if st.button(t["btn_run_rx"], type="primary", width='stretch'):
         run_rx_clicked = True
 
 # Validate user logic before assigning run_mode
@@ -830,7 +830,7 @@ if st.session_state.run_mode:
                 
                 col_spacer, col_btn = st.columns([0.76, 0.24], vertical_alignment="bottom")
                 with col_btn: render_lazy_download(analysis['id'], fig, callsign, t)
-                st.pyplot(fig, use_container_width=True, bbox_inches=None)
+                st.pyplot(fig, width='stretch', bbox_inches=None)
                 
                 # Prepare skeleton placeholders for the interactive inspector fragment
                 inspector_container = st.container()
@@ -870,7 +870,7 @@ with col_d3:
     # Generate the heavy PDF on demand via the imported engine
     pdf_bytes = generate_pdf_doc(doc_lang, logo_base64, APP_VERSION)
     if pdf_bytes:
-        st.download_button(label="💾", data=pdf_bytes, file_name=f"WSPRadar_Doc_{doc_lang.upper()}.pdf", mime="application/pdf", use_container_width=True)
+        st.download_button(label="💾", data=pdf_bytes, file_name=f"WSPRadar_Doc_{doc_lang.upper()}.pdf", mime="application/pdf", width='stretch')
     else:
         st.button("💾", disabled=True, help="PDF Export requires 'markdown' and 'xhtml2pdf' packages.")
 
