@@ -17,11 +17,15 @@ import streamlit as st
 # ==========================================
 from config import (
     APP_VERSION, LOGO_URL, APP_URL, DB_URL, CACHE_DIR, MAX_DAYS_HISTORY,
-    COMPASS, BAND_MAP
+    COMPASS, BAND_MAP,
+    DEMO_CALLSIGN, DEMO_QTH, DEMO_BAND, DEMO_START_D, DEMO_END_D, 
+    DEMO_START_T, DEMO_END_T, DEMO_HOURS, DEMO_REF_RADIUS, DEMO_REF_CALLSIGN,
+    DEMO_SELF_QTH_A, DEMO_SELF_QTH_B, DEMO_MAX_DIST, 
+    DEMO_MIN_SPOTS, DEMO_MIN_STATIONS, DEMO_WILCOXON
 )
 from i18n import T
 from core.math_utils import locator_to_latlon, is_valid_6char_locator, get_solar_state, quantize_time
-from core.data_engine import fetch_wspr_data
+from core.data_engine import fetch_wspr_data, cleanup_old_parquets
 from core.plot_engine import generate_map_plot
 from docs.pdf_generator import generate_pdf_doc, get_docs
 
@@ -117,23 +121,30 @@ def set_reset_config():
     st.session_state.run_mode = None
 
 def set_demo_config():
-    """Pre-populates the configuration with specific values to showcase a successful test run."""
+    """Pre-populates the configuration with specific values from config.py to showcase a successful test run, ensuring 100% deterministic UI state."""
     t = T[st.session_state.lang]
-    st.session_state.val_callsign = "DL1MKS"
-    st.session_state.val_qth = "JN37"
-    st.session_state.val_band = "20m"
+    st.session_state.val_callsign = DEMO_CALLSIGN
+    st.session_state.val_qth = DEMO_QTH
+    st.session_state.val_band = DEMO_BAND
     st.session_state.val_time_mode = t["opt_custom"]
-    st.session_state.val_start_d = datetime(2026, 3, 27).date()
-    st.session_state.val_end_d = datetime(2026, 3, 31).date()
-    st.session_state.val_start_t = dt_time(0, 0)
-    st.session_state.val_end_t = dt_time(0, 0)
+    st.session_state.val_hours = DEMO_HOURS
+    st.session_state.val_start_d = DEMO_START_D
+    st.session_state.val_end_d = DEMO_END_D
+    st.session_state.val_start_t = DEMO_START_T
+    st.session_state.val_end_t = DEMO_END_T
     st.session_state.val_solar = t["opt_solar_all"]
     st.session_state.val_comp_mode = t["opt_comp_radius"]
-    st.session_state.val_ref_radius = 250
-    st.session_state.val_max_dist = 22000
-    st.session_state.val_min_spots = 1
-    st.session_state.val_min_stations = 1
-    st.session_state.val_wilcoxon = "OFF"
+    st.session_state.val_ref_radius = DEMO_REF_RADIUS
+    st.session_state.val_ref_callsign = DEMO_REF_CALLSIGN
+    st.session_state.val_self_test_mode = t["opt_self_rx"]
+    st.session_state.val_self_qth_a = DEMO_SELF_QTH_A
+    st.session_state.val_self_qth_b = DEMO_SELF_QTH_B
+    st.session_state.val_slot_u = t["opt_slot_even"]
+    st.session_state.val_slot_r = t["opt_slot_odd"]
+    st.session_state.val_max_dist = DEMO_MAX_DIST
+    st.session_state.val_min_spots = DEMO_MIN_SPOTS
+    st.session_state.val_min_stations = DEMO_MIN_STATIONS
+    st.session_state.val_wilcoxon = DEMO_WILCOXON
     st.session_state.run_mode = None
 
 # ==========================================
@@ -656,8 +667,18 @@ status_ui = st.empty()
 # ==========================================
 if st.session_state.run_mode:
     
+    # Speichermanagement: Veraltete Parquet-Dateien vor dem neuen Lauf bereinigen
+    cleanup_old_parquets()
+    
+    # Strikte Prüfung auf Demo-Run komplett ohne Hardcoding (inklusive Band-Check für mehr Präzision)
     is_demo_run = False
-    if time_mode == t["opt_custom"] and callsign == "DL1MKS" and start_d == datetime(2026, 3, 27).date() and end_d == datetime(2026, 3, 31).date(): is_demo_run = True
+    if (time_mode == t["opt_custom"] and 
+        callsign == DEMO_CALLSIGN and 
+        start_d == DEMO_START_D and 
+        end_d == DEMO_END_D and 
+        band == DEMO_BAND):
+        is_demo_run = True
+        
     time_filter = f"time BETWEEN '{start_t.strftime('%Y-%m-%d %H:%M:%S')}' AND '{end_t.strftime('%Y-%m-%d %H:%M:%S')}'"
     
     is_sequential = False

@@ -4,6 +4,8 @@ Führt die geografische Aggregation durch, rechnet Statistik (Wilcoxon) und zeic
 """
 import pandas as pd
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')  # Zwingt Matplotlib in den Headless-Modus (verhindert RAM-Leaks auf Streamlit Cloud)
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import matplotlib.path as mpath

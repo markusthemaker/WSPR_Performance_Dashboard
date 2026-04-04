@@ -3,6 +3,7 @@ Zentrale Konfigurationsdatei für WSPRadar.
 Enthält alle Konstanten, Farben, Bounding-Boxen und Grundeinstellungen.
 """
 import os
+from datetime import date, time as dt_time
 
 # ==========================================
 # APP METADATA & URLs
@@ -21,6 +22,26 @@ MAX_DAYS_HISTORY = 7
 
 # Cache-Ordner beim Import automatisch anlegen
 os.makedirs(CACHE_DIR, exist_ok=True)
+
+# ==========================================
+# DEMO CONFIGURATION
+# ==========================================
+DEMO_CALLSIGN = "DL1MKS"
+DEMO_QTH = "JN37"
+DEMO_BAND = "20m"
+DEMO_START_D = date(2026, 3, 27)
+DEMO_END_D = date(2026, 3, 31)
+DEMO_START_T = dt_time(0, 0)
+DEMO_END_T = dt_time(0, 0)
+DEMO_HOURS = 24  # Neu: Fallback für den Time-Slider
+DEMO_REF_RADIUS = 250
+DEMO_REF_CALLSIGN = "DL2XYZ"  # Neu: Fallback für Buddy Mode
+DEMO_SELF_QTH_A = "JN37"      # Neu: Fallback für Self-Test A
+DEMO_SELF_QTH_B = ""          # Neu: Fallback für Self-Test B
+DEMO_MAX_DIST = 22000
+DEMO_MIN_SPOTS = 1
+DEMO_MIN_STATIONS = 1
+DEMO_WILCOXON = "OFF"
 
 # ==========================================
 # GEOSPATIAL CONSTANTS
