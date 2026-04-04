@@ -362,14 +362,76 @@ st.markdown("""
     @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
     html, body, [class*="css"] { font-family: 'Space Mono', monospace !important; }
     .stApp { background-color: #050a15; background-image: radial-gradient(circle at 50% 50%, #0a1428 0%, #02040a 100%); color: #e0e0e0; }
-    .block-container { max-width: 1024px !important; padding-top: 3.5rem !important; }
+    
+    .block-container { max-width: 1024px !important; padding-top: 2rem !important; }
+    
     div.stButton > button[kind="primary"] {
         background-color: transparent !important; color: #39ff14 !important; border: 2px solid #39ff14 !important;
         font-family: 'Space Mono', monospace !important; font-size: 1.0rem; font-weight: 700; text-transform: uppercase;
         letter-spacing: 1px; box-shadow: 0 0 10px rgba(57, 255, 20, 0.2), inset 0 0 10px rgba(57, 255, 20, 0.1); transition: all 0.3s ease;
     }
     div.stButton > button[kind="primary"]:hover { background-color: rgba(57, 255, 20, 0.1) !important; box-shadow: 0 0 20px rgba(57, 255, 20, 0.6), inset 0 0 15px rgba(57, 255, 20, 0.3); }
-    div.stButton > button[kind="secondary"] { border-color: rgba(57, 255, 20, 0.5) !important; color: #e0e0e0 !important; font-size: 0.85rem !important; padding: 0.2rem 0.5rem !important; margin-top: 10px; }
+    
+    /* Sekundäre Buttons (Reset, Demo) */
+    div.stButton > button[kind="secondary"] { border-color: rgba(57, 255, 20, 0.5) !important; color: #e0e0e0 !important; font-size: 0.85rem !important; padding: 0.2rem 0.5rem !important; margin-top: 10px; transition: all 0.3s ease; }
+    div.stButton > button[kind="secondary"]:hover { border-color: #39ff14 !important; color: #39ff14 !important; box-shadow: 0 0 10px rgba(57, 255, 20, 0.2) !important; }
+
+    /* Selectbox (Sprachauswahl) an den Button-Style anpassen */
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
+        background-color: transparent !important;
+        border: 1px solid rgba(57, 255, 20, 0.5) !important;
+        border-radius: 0.5rem !important;
+        color: #e0e0e0 !important;
+        font-family: 'Space Mono', monospace !important;
+        min-height: 40px !important; 
+        margin-top: 10px; 
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover {
+        border-color: #39ff14 !important;
+        box-shadow: 0 0 10px rgba(57, 255, 20, 0.2) !important;
+    }
+    
+    /* NEU: Zwingt den inneren Text-Container der Selectbox zur absoluten Zentrierung */
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div > div:first-child {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: 100% !important;
+        padding-left: 24px; /* Visueller Ausgleich für das Pfeil-Icon rechts */
+    }
+
+    /* Die Schriftart und Größe im geschlossenen Select-Feld erzwingen */
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] span {
+        font-family: 'Space Mono', monospace !important;
+        font-size: 0.85rem !important;
+        color: inherit !important;
+        text-align: center !important;
+    }
+    /* Das Dropdown-Pfeil-Icon einfärben */
+    div[data-testid="stSelectbox"] svg {
+        fill: #39ff14 !important;
+    }
+    
+    /* Das geöffnete Dropdown-Menü (Popover) stylen */
+    div[data-baseweb="popover"] ul {
+        background-color: #0a1428 !important;
+        border: 1px solid #39ff14 !important;
+        border-radius: 0.5rem !important;
+    }
+    div[data-baseweb="popover"] ul li {
+        font-family: 'Space Mono', monospace !important;
+        font-size: 0.85rem !important;
+        color: #e0e0e0 !important;
+        background-color: transparent !important;
+        text-align: center !important;
+    }
+    div[data-baseweb="popover"] ul li:hover {
+        color: #39ff14 !important;
+        background-color: rgba(57, 255, 20, 0.1) !important;
+    }
+
     label[data-testid="stWidgetLabel"] p, label[data-testid="stWidgetLabel"] div, div[data-testid="stRadio"] p, label[data-testid="stCheckbox"] p, label[data-testid="stCheckbox"] span { font-family: 'Space Mono', monospace !important; font-size: 14px !important; font-weight: 700 !important; color: #cccccc !important; }
     summary[data-testid="stExpanderToggle"] p { font-family: 'Space Mono', monospace !important; font-size: 16px !important; font-weight: 700 !important; color: #39ff14 !important; text-transform: uppercase; letter-spacing: 1px; }
     h3.section-title { font-family: 'Rajdhani', sans-serif !important; font-size: 2rem !important; color: #ffffff !important; border-bottom: 1px solid rgba(57, 255, 20, 0.3); padding-bottom: 10px; margin-top: 1.5rem; margin-bottom: 1.5rem; letter-spacing: 1px; }
@@ -377,39 +439,72 @@ st.markdown("""
     .stMarkdown h4 { color: #ffffff !important; margin-top: 1.8rem; font-size: 1.2rem; font-weight: 700; text-transform: uppercase; }
     .stMarkdown ol, .stMarkdown ul { padding-left: 2.5rem !important; margin-top: 0.5rem; }
     .stMarkdown li { margin-bottom: 0.8rem; }
+    
+    a.header-anchor { display: none !important; }
+    
+    .pc-break { display: inline; }
+    .mobile-pipe { display: none; }
+    
     @media (max-width: 768px) {
-        img.main-logo { display: none !important; }
-        h1.main-title { font-size: 3.5rem !important; text-align: center !important; }
-        h2.main-subtitle { font-size: 0.8rem !important; letter-spacing: 1px !important; margin-top: 8px !important; text-align: center !important; margin-left: 0 !important; }
-        .text-container { align-items: center !important; }
+        .block-container { padding-top: 1.5rem !important; } 
+
+        .header-container { 
+            flex-wrap: wrap !important; 
+            padding-bottom: 0.3rem !important; 
+            margin-bottom: 0.5rem !important; 
+            justify-content: center !important;
+            align-items: center !important;
+        }
+        .text-container { display: contents !important; }
+        img.main-logo { display: block !important; width: 65px !important; height: 65px !important; margin-right: 12px !important; margin-bottom: 0 !important; }
+        h1.main-title { font-size: 2.8rem !important; text-align: left !important; line-height: 1.0 !important; margin: 0 !important; }
+        h2.main-subtitle { 
+            width: 100% !important; 
+            font-size: 0.83rem !important; 
+            letter-spacing: 0.5px !important; 
+            margin-top: 2px !important; 
+            text-align: center !important; 
+            margin-left: 0px !important; 
+            white-space: normal !important; 
+            line-height: 1.3 !important; 
+        }
+        
+        .dev-credit-container { font-size: 0.7rem !important; line-height: 1.3 !important; padding: 0 5px !important; margin-bottom: 1rem !important; }
+        .pc-break { display: none !important; }
+        .mobile-pipe { display: inline !important; }
     }
 </style>
 """, unsafe_allow_html=True)
 
-# Top Bar: Language Selector
-lang_col1, lang_col2 = st.columns([0.88, 0.12])
-with lang_col2:
-    idx = 0 if st.session_state.lang == "en" else 1
-    st.selectbox("Lang", ["EN", "DE"], index=idx, key="lang_selector_ui", label_visibility="collapsed", on_change=update_lang)
-
-# Header Section: Logo and Titles
+# Header Section: Logo and Titles for PC 
 logo_base64 = get_base64_of_bin_file("img/WSPRadar.png")
 st.markdown(f"""
-<div style="display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(57, 255, 20, 0.3); padding-top: 0px;">
-    <img class="main-logo" src="data:image/png;base64,{logo_base64}" alt="WSPRadar Logo" style="width: 140px; height: 140px; margin-right: 25px; filter: drop-shadow(0 0 15px rgba(57, 255, 20, 0.6)); padding: 5px;">
+<div class="header-container" style="display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(57, 255, 20, 0.3); padding-top: 0px;">
+    <img class="main-logo" src="data:image/png;base64,{logo_base64}" alt="WSPRadar Logo" style="width: 140px; height: 140px; margin-right: 25px; filter: drop-shadow(0 0 10px rgba(57, 255, 20, 0.6)); padding: 5px;">
     <div class="text-container" style="display: flex; flex-direction: column; align-items: flex-start;">
         <h1 class="main-title" style="font-family: 'Rajdhani', sans-serif; font-size: 5rem; font-weight: 700; color: #ffffff; margin: 0; line-height: 0.9; letter-spacing: 2px; text-shadow: 0 0 15px rgba(255,255,255,0.2);">{t["title"]}</h1>
-        <h2 class="main-subtitle" style="font-family: 'Space Mono', monospace; font-size: 1.13rem; color: #39ff14; margin: 8px 0 0 4px; font-weight: 700; letter-spacing: 1px; text-align: left;">{t["subtitle"]}</h2>
+        <h2 class="main-subtitle" style="font-family: 'Space Mono', monospace; font-size: 1.13rem; color: #39ff14; margin: -15px 0 0 4px; font-weight: 700; letter-spacing: 1px; text-align: left;">{t["subtitle"]}</h2>
     </div>
 </div>
-<div style='text-align: center; color: #888888; font-size: 0.9rem; margin-bottom: 2rem;'>{t["dev_credit"]}</div>
+<div class="dev-credit-container" style='text-align: center; color: #888888; font-size: 0.85rem; margin-top: 0.5rem; margin-bottom: 1.5rem; line-height: 1.3;'>{t["dev_credit"]}</div>
 """, unsafe_allow_html=True)
 
-# Configuration Section Header
-col_hdr, col_b1, col_b2 = st.columns([0.5, 0.25, 0.25])
-with col_hdr: st.markdown(f'<h3 class="section-title" style="margin-top:0;">{t["config_title"]}</h3>', unsafe_allow_html=True)
-with col_b1: st.button(t["btn_reset"], on_click=set_reset_config, use_container_width=True)
-with col_b2: st.button(t["btn_demo"], on_click=set_demo_config, use_container_width=True)
+# Configuration Controls (Titel entfernt für mehr Platz)
+col_lang, col_b1, col_b2 = st.columns(3, vertical_alignment="bottom")
+
+with col_lang:
+    # Formatiert die internen Keys ("EN"/"DE") für die UI in Flaggen + Text
+    def format_lang_ui(lang_key):
+        return "🇬🇧 English" if lang_key == "EN" else "🇩🇪 Deutsch"
+
+    idx = 0 if st.session_state.lang == "en" else 1
+    st.selectbox("Lang", ["EN", "DE"], index=idx, key="lang_selector_ui", label_visibility="collapsed", on_change=update_lang, format_func=format_lang_ui)
+
+with col_b1: 
+    st.button(t["btn_reset"], on_click=set_reset_config, use_container_width=True)
+
+with col_b2: 
+    st.button(t["btn_demo"], on_click=set_demo_config, use_container_width=True)
 
 # ----------------------------------------
 # Expander 1: Core Parameters
